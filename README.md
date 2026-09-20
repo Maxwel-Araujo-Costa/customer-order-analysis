@@ -1,6 +1,8 @@
-# CloudWalk — Collection Engineer Technical Challenge
+# Customer Order Analysis
 
-Python solution for the **Collection Engineer technical challenge**, focused on analyzing customer orders, applying business rules, detecting potentially suspicious orders, and generating a consolidated customer report.
+Python application for analyzing customer orders, applying business rules, detecting potentially suspicious orders, and generating a consolidated customer report.
+
+This repository was built as a technical challenge for a Collection Engineer position at CloudWalk. It's shared here as a portfolio example of data analysis, business rule implementation, and testing practices in Python.
 
 ## Overview
 
@@ -30,6 +32,14 @@ The solution:
 
 An order is flagged as suspicious (`is_suspicious`) when its value is greater than **3 times the customer's average order value**, calculated over the orders within the analyzed period.
 
+## Tech Stack
+
+- Python
+- Pandas
+- Pytest
+- JSON / CSV
+- CLI with argparse
+
 ## Key Interpretation Decisions
 
 The challenge description leaves a few points open to interpretation. The decisions below were made deliberately and are documented here for review:
@@ -43,14 +53,18 @@ The challenge description leaves a few points open to interpretation. The decisi
 ## Project Structure
 
 ```text
-collection-challenge/
+customer-order-analysis/
 │
 ├── data/
+│   ├── .gitkeep
 │   ├── customers.json
-│   └── orders.csv
+│   ├── orders.csv
+│   ├── customers.sample.json
+│   └── orders.sample.csv
 │
 ├── output/
-│   └── report.json          # generated on each run (git-ignored)
+│   ├── report.json          # generated on each run (git-ignored)
+│   └── .gitkeep
 │
 ├── src/
 │   └── main.py
@@ -96,15 +110,7 @@ python -m pip install -r requirements.txt
 
 ## Input Data
 
-The input datasets are intentionally not included in the repository due to data privacy considerations.
-
-Place the provided files in the following directory:
-
-```text
-data/
-├── customers.json
-└── orders.csv
-```
+The original challenge datasets are not included in the repository due to data privacy considerations. Synthetic sample datasets are provided so the project can be executed immediately.
 
 ## Usage
 
@@ -118,7 +124,17 @@ python src/main.py --start-date 2025-01-01 --end-date 2025-03-31
 
 Only orders within the specified period (inclusive) are considered when calculating totals, discounts, order counts, and suspicious orders.
 
-The final report is printed as a summary to the console and written to `output/report.json`.
+The final report is exported to `output/report.json`, with the output path displayed in the console.
+
+## Sample Data
+
+This repository includes small synthetic sample files (`data/customers.sample.json`, `data/orders.sample.csv`) so the project can be run immediately, without needing the original (private) dataset. All names and values are fictional.
+
+To run with the sample data:
+
+```bash
+python src/main.py --start-date 2025-01-01 --end-date 2025-03-31 --sample
+```
 
 ## Tests
 
@@ -169,3 +185,26 @@ The solution intentionally avoids unnecessary infrastructure or dependencies (no
 ## Notes
 
 The suspicious-order rule and the discount rules are applied according to the challenge specification, with the interpretation choices documented in [Key Interpretation Decisions](#key-interpretation-decisions). Where the spec was ambiguous, the decision that most closely matched a literal reading of the requirements was chosen, and alternatives were noted for discussion.
+
+## Sample Output
+
+```json
+[
+  {
+    "name": "Ana Souza",
+    "category": "VIP",
+    "total_spent_before_discount": 1050.0,
+    "total_spent_after_discount": 945.0,
+    "suspicious_orders": []
+  },
+  {
+    "name": "Diego Alves",
+    "category": "VIP",
+    "total_spent_before_discount": 1050.0,
+    "total_spent_after_discount": 945.0,
+    "suspicious_orders": [
+      {"order_id": 109, "value": 900.0, "date": "2025-01-15"}
+    ]
+  }
+]
+```

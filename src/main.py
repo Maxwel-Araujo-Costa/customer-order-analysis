@@ -4,8 +4,13 @@ import argparse
 import json
 
 BASE_DIR = Path(__file__).resolve().parent.parent / "data"
+
 orders_path = BASE_DIR / "orders.csv"
 customers_path = BASE_DIR / "customers.json"
+
+sample_orders_path = BASE_DIR / "orders.sample.csv"
+sample_customers_path = BASE_DIR / "customers.sample.json"
+
 OUTPUT_DIR = Path(__file__).resolve().parent.parent / "output"
 REPORT_PATH = OUTPUT_DIR / "report.json"
 
@@ -38,6 +43,7 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description="Analyze customer orders.")
     parser.add_argument("--start-date", type=pd.to_datetime, required=True)
     parser.add_argument("--end-date", type=pd.to_datetime, required=True)
+    parser.add_argument("--sample", action="store_true", help="Use the synthetic sample datasets.")
     args = parser.parse_args()
 
     if args.start_date > args.end_date:
@@ -122,8 +128,14 @@ def export_report(report, output_path):
     with open(output_path, 'w', encoding='utf-8') as f:
         json.dump(report, f, indent=2, ensure_ascii=False, default=default_serializer)
 
+def get_input_paths(use_sample):
+    if use_sample:
+        return sample_orders_path, sample_customers_path
+    return orders_path, customers_path
+
 def main():
     args = parse_arguments()
+    orders_path, customers_path = get_input_paths(args.sample)
     orders = read_csv(orders_path)
     customers = read_json(customers_path)
 

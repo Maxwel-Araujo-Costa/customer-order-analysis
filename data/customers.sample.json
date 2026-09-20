@@ -1,0 +1,7 @@
+[
+  {"id": 1, "name": "Ana Souza", "tier": "VIP"},
+  {"id": 2, "name": "Bruno Lima", "tier": "Regular"},
+  {"id": 3, "name": "Carla Mendes", "tier": "Regular"},
+  {"id": 4, "name": "Diego Alves", "tier": "VIP"},
+  {"id": 5, "name": "Elena Rocha", "tier": "Regular"}
+]
